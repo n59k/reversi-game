@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="userController" type="sk.tuke.gamestudio.server.controller.user.UserController"*/-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div th:fragment="header" class="z-10 transition duration-300 ease-out fixed top-0 left-0 right-0">
+
+    <section class="header-menu py-8 px-4 lg:px-10 bg-white transition-all duration-700">
+            <nav class="relative flex justify-between items-center">
+              <a class="text-2xl text-gray-900 font-bold" href="/home">
+                <img class="h-7" src="/images/reversi-logo/logo.svg" alt="" width="auto">
+              </a>
+              <div class="lg:hidden" data-path="0.0.1">
+                <button class="navbar-burger flex items-center p-3 hover:bg-gray-50 text-gray-900 rounded">
+                  <svg class="w-10 h-3" width="39" height="13" viewBox="0 0 39 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="39" height="2" rx="1" fill="currentColor"></rect><rect x="19" y="11" width="20" height="2" rx="1" fill="currentColor"></rect>
+                    <title>Mobile menu</title>
+                  </svg>
+                </button>
+              </div>
+              <div class="hidden lg:block absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <ul class="flex items-center space-x-16 text-lg font-bold">
+                  <li><a class="hover:text-blue-600 transition duration-200" href="/reversi">Game</a></li>
+                  <li><a class="hover:text-blue-600 transition duration-200" href="/rating/reversi">Rating</a></li>
+                  <li><a class="hover:text-blue-600 transition duration-200" href="/comments/reversi">Comments</a></li>
+                  <li><a class="hover:text-blue-600 transition duration-200" href="/score/reversi">Score</a></li>
+                  <li><a class="hover:text-blue-600 transition duration-200" href="/contact">Contact</a></li>
+                </ul>
+              </div>
+              <div class="hidden lg:block" th:if="${@userController.logged}"><a class="inline-block px-8 py-2 text-white font-bold bg-black border border-black hover:bg-white hover:text-black rounded-full transition duration-200" href="/logout">Logout</a></div>
+              <div class="hidden lg:block" th:if="not ${@userController.logged}"><a class="inline-block px-8 py-2 text-white font-bold bg-black border border-black hover:bg-white hover:text-black rounded-full transition duration-200" href="/">Sign Up</a></div>
+            </nav>
+            <div class="hidden navbar-menu fixed top-0 left-0 bottom-0 w-5/6 max-w-sm z-50">
+              <div class="navbar-backdrop fixed inset-0 bg-blue-600 opacity-80"></div>
+              <nav class="relative flex flex-col py-8 w-full h-full bg-gray-800 overflow-y-auto">
+                <div class="flex items-center mb-16 pr-6">
+                  <a class="ml-10 text-2xl text-white font-bold" href="/home">
+                    <img class="h-7" src="/images/reversi-logo/logo.svg" alt="" width="auto">
+                  </a>
+                </div>
+                <div>
+                  <ul>
+                    <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-white hover:bg-gray-500 rounded-xl" href="/reversi">Game</a></li>
+                    <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-white hover:bg-gray-500 rounded-xl" href="/rating/reversi">Rating</a></li>
+                    <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-white hover:bg-gray-500 rounded-xl" href="/comments/reversi">Comments</a></li>
+                    <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-white hover:bg-gray-500 rounded-xl" href="/score/reversi">Score</a></li>
+                    <li class="mb-1 px-10"><a class="block pl-8 py-4 text-xl text-white hover:bg-gray-500 rounded-xl" href="/contact">Contact</a></li>
+                  </ul>
+                </div>
+                <div class="mt-auto px-10">
+                  <div class="pt-6" ><a class="block mb-4 py-2 px-8 text-white text-center font-bold hover:bg-white hover:text-gray-800 border border-gray-50 rounded-full transition duration-200" href="#">Sign in</a><a class="block py-2 px-8 text-white text-center font-bold bg-blue-500 hover:bg-blue-600 rounded-full transition duration-200" href="#">Sign up</a></div>
+                  <p class="mt-6 mb-4 text-lg text-center text-white">
+                    <span>2021 © N59K. All rights reserved.</span>
+                  </p>
+                </div>
+              </nav>
+            </div>
+    </section>
+
+</div>
+
+
+<div th:fragment="footer">
+    <section class="pt-6 pb-8 px-4 lg:px-10 bg-white">
+        <div class="flex flex-wrap items-center pt-10 mb-8 lg:mb-0">
+            <div class="w-full md:w-1/2 mb-8 md:mb-0">
+                <div class="md:flex items-center">
+                    <a class="inline-block text-gray-900 text-xl font-bold" href="/home">
+                        <img class="h-7" src="/images/reversi-logo/logo.svg" alt="" width="auto">
+                    </a>
+                    <span class="hidden md:inline-block mx-8 w-px h-8 bg-gray-50"></span>
+                    <p class="hidden lg:block text-m font-bold">
+                        <span th:if="${@userController.logged}">Logged as: <span th:text="${@userController.loggedUser.login}"/></span>
+
+                    </p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <div class="md:flex items-center justify-end">
+                    <a class="inline-block mr-10 w-12 h-12 flex items-center justify-center" href="https://www.instagram.com">
+                        <img src="/images/logo-service/instagram-logo.svg" alt="nstagram-logo">
+                    </a>
+                    <a class="inline-block mr-10 w-16 h-16 flex items-center justify-center" href="https://www.youtube.com">
+                        <img src="/images/logo-service/youtube-logo.svg" alt="youtube-logo">
+                    </a>
+                    <a class="inline-block w-12 h-12 flex items-center justify-center" href="https://github.com/n59k">
+                        <img src="/images/logo-service/github-logo.svg" alt="github-logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!--<div th:fragment="board">-->
+<!--    <table>-->
+<!--        <tr th:each="row, rowStat : *{board}">-->
+<!--            <td th:each="cell, cellStat : ${row}" th:attr="data-row=${rowStat.index}, data-col=${cellStat.index}" class="w-5 h-5">-->
+<!--                <img th:if="${cell == 'X'}" class="w-5 h-5" src="/images/place1.png">-->
+<!--                <img th:if="${cell == 'O'}" class="w-5 h-5" src="/images/place2.png">-->
+<!--                <img th:if="${cell == '-'}" class="w-5 h-5" src="/images/place.png">-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--</div>-->
+
+</html>

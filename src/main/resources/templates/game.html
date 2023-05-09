@@ -1,0 +1,158 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reversi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<div th:replace="fragments::header"/>
+
+
+
+<section class="relative pt-32 pb-40 2xl:pt-50" th:if="not ${@userController.logged}">
+    <div class="container px-4 mx-auto mb-4 md:mb-24">
+        <div class="text-center">
+            <h2 class="mb-8 text-6xl 2xl:text-7xl font-bold font-heading">Play Reversi.</h2>
+            <p class="mb-16 text-xl">Create account or Login to start playing.</p>
+            <a class="inline-block px-12 py-5 bg-blue-500 hover:bg-blue-600 rounded-full text-lg font-bold text-white transition duration-200" href="/">Sign up for game!</a>
+        </div>
+    </div>
+    <div class="relative">
+        <img class="lg:relative lg:max-w-4xl mx-auto" src="/images/home/reversi-mockup.png" alt="macbook-mockup">
+    </div>
+</section>
+
+<section th:if="${@userController.logged}">
+    <div class="pt-32 2xl:pt-50 overflow-hidden" >
+        <div class="container px-4 mx-auto">
+            <div class="pb-16 text-center">
+                <span class="text-lg text-blue-500 font-bold">Reversi</span>
+                <h2 class="mt-8 text-5xl font-bold font-heading">Game</h2>
+                <form method="post" th:action="@{/reversi/size}" class="w-2/5 m-auto mt-10">
+                    <label for="size" class="sr-only"></label>
+                    <select name="size" id="size" class="block py-2.5 px-0 w-full text-m text-blue-500 bg-transparent border-0 border-b-2 border-blue-500 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer">
+                        <option selected>Select the field size</option>
+                        <option value="6">Size 6</option>
+                        <option value="8">Size 8</option>
+                    </select>
+                    <button type="submit" class="inline-block mt-10 px-12 py-5 bg-blue-500 hover:bg-blue-600 rounded-full text-lg font-bold text-white transition duration-200">Play!</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap container px-4 mx-auto mb-20">
+        <div class="relative w-full lg:w-3/5 pr-4 mb-8 lg:mb-0 lg:py-12">
+            <a href="#">
+                <div class="m-auto" id="board" th:utext="${boardHtml}"/>
+            </a>
+        </div>
+        <div class="w-full lg:w-2/5 pl-4 lg:py-12">
+            <span class="text-lg text-blue-500 font-bold">Reversi</span>
+            <p th:if="${@userController.logged}" class="text-lg font-bold">Hello <span th:text="${@userController.loggedUser.login}"></span>!</p>
+            <a href="#">
+                <h2 class="max-w-lg mt-10 text-2xl lg:text-4xl font-bold font-heading">Your task is to occupy as many cells as possible!</h2>
+            </a>
+            <div class="inline-flex items-center">
+                <div class="text-left">
+                    <button id="new-game" type="button" class="inline-block mt-10 px-12 py-5 bg-blue-500 hover:bg-blue-600 rounded-full text-lg font-bold text-white transition duration-200">New Game!</button>
+                    <div class="flex">
+                        <p class="text-xl lg:text-3xl font-bold my-5 mr-5">Player: <span id="playerScore">0</span></p>
+                        <p class="text-xl lg:text-3xl font-bold my-5">Bot: <span id="botScore">0</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</section>
+<div th:replace="fragments::footer"/>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        $(document).on('click', '#board td', function (event) {
+            var row = $(this).data('row');
+            var col = $(this).data('col');
+            if ($(this).find('img').attr('src') === '/images/reversi-game/cell-movable.png') {
+                event.preventDefault();
+                console.log("Choosed cell: " + row + ", " + col);
+                makeMove(row, col);
+            }
+        });
+
+        $(document).on('click', '#new-game', function() {
+            location.reload();
+        });
+
+        function makeMove(row, col) {
+            $.ajax({
+                type: "POST",
+                url: "/reversi/move",
+                data: {row: row, col: col},
+                success: function (data) {
+                    var responseData = JSON.parse(data);
+                    var board = document.getElementById("board");
+                    board.innerHTML = responseData.boardHtml;
+                    document.getElementById("playerScore").innerText = responseData.playerScore;
+                    document.getElementById("botScore").innerText = responseData.botScore;
+
+                    if (responseData.gameOver) {
+                        var winnerText;
+                        if (responseData.playerScore > responseData.botScore) {
+                            winnerText = "You win!";
+                        } else if (responseData.playerScore < responseData.botScore) {
+                            winnerText = "Unfortunately, you lost!";
+                        } else {
+                            winnerText = "Tie!";
+                        }
+                        alert(winnerText);
+                    }
+                },
+                dataType: "html"
+            });
+            return false;
+        }
+
+
+    });
+
+
+</script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var menus = document.querySelector('.header-menu');
+
+        function minimizeMenu() {
+            menus.classList.remove('py-8');
+            menus.classList.add('py-5');
+            menus.classList.add('drop-shadow-2xl');
+        }
+        function showBackMenu() {
+            menus.classList.remove('py-5');
+            menus.classList.remove('drop-shadow-2xl');
+            menus.classList.add('py-8');
+
+        }
+        function handleScroll() {
+            var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            if (scrollPosition > 150) {
+                minimizeMenu();
+
+            } else {
+                showBackMenu();
+            }
+        }
+        window.addEventListener('scroll', handleScroll);
+    });
+</script>
+
+</body>
+</html>

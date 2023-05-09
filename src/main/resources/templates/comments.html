@@ -1,0 +1,130 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Comments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+
+<div th:replace="fragments::header"/>
+<section class="pt-40 2xl:pt-50 overflow-hidden" >
+    <div class="container px-4 mx-auto">
+        <div class="mb-14 pb-16 text-center">
+            <span class="text-lg text-blue-500 font-bold">Reversi</span>
+            <h2 class="mt-8 text-5xl font-bold font-heading">Comments</h2>
+        </div>
+    </div>
+</section>
+
+<section class="py-10 2xl:py-20 overflow-hidden" th:if="${@userController.logged}">
+    <div class="container px-4 mx-auto">
+        <div class="mx-auto">
+            <div class="flex flex-wrap items-center -mx-10">
+                <div class="w-full px-10">
+                    <div class="px-6 lg:px-20 py-12 lg:py-24 bg-white shadow-2xl rounded-lg">
+                        <form action="/comments/reversi" method="post">
+                            <h3 class="mb-10 text-2xl font-bold font-heading text-center">Write your comment</h3>
+                            <div class="flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full">
+                      <span class="inline-block pr-3 border-r border-gray-50">
+                        <svg class="w-5 h-5" width="20" height="21" viewBox="0 0 20 21" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M7.29593 0.492188C4.81333 0.492188 2.80078 2.50474 2.80078 4.98734C2.80078 7.46993 4.81333 9.48248 7.29593 9.48248C9.77851 9.48248 11.7911 7.46993 11.7911 4.98734C11.7911 2.50474 9.77851 0.492188 7.29593 0.492188ZM3.69981 4.98734C3.69981 3.00125 5.30985 1.39122 7.29593 1.39122C9.28198 1.39122 10.892 3.00125 10.892 4.98734C10.892 6.97342 9.28198 8.58346 7.29593 8.58346C5.30985 8.58346 3.69981 6.97342 3.69981 4.98734Z"
+                                fill="black"></path>
+                          <path d="M5.3126 10.3816C2.38448 10.3816 0.103516 13.0524 0.103516 16.2253V19.8214C0.103516 20.0696 0.304772 20.2709 0.55303 20.2709H14.0385C14.2867 20.2709 14.488 20.0696 14.488 19.8214C14.488 19.5732 14.2867 19.3719 14.0385 19.3719H1.00255V16.2253C1.00255 13.4399 2.98344 11.2806 5.3126 11.2806H9.27892C10.5443 11.2806 11.6956 11.9083 12.4939 12.9335C12.6465 13.1293 12.9289 13.1644 13.1248 13.0119C13.3207 12.8594 13.3558 12.5769 13.2033 12.381C12.2573 11.1664 10.8566 10.3816 9.27892 10.3816H5.3126Z"
+                                fill="black"></path>
+                          <rect x="15" y="15" width="5" height="1" rx="0.5" fill="black"></rect><rect x="17" y="18"
+                                                                                                      width="5"
+                                                                                                      height="1"
+                                                                                                      rx="0.5"
+                                                                                                      transform="rotate(-90 17 18)"
+                                                                                                      fill="black"></rect>
+                        </svg>
+                      </span>
+                                <input type="hidden" name="game" value="{game}">
+                                <input class="w-full pr-6 pl-4 py-4 font-bold placeholder-gray-900 rounded-r-full focus:outline-none"
+                                       type="text" id="playerName" name="playerName" placeholder="Your name">
+                            </div>
+                            <div class="flex items-center pl-6 mb-3 border border-gray-50 bg-white rounded-full">
+                      <span class="inline-block pr-3 border-r border-gray-50">
+                          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                               width="50" height="50"
+                               viewBox="0 0 50 50">
+                            <path d="M 25 4.0625 C 12.414063 4.0625 2.0625 12.925781 2.0625 24 C 2.0625 30.425781 5.625 36.09375 11 39.71875 C 10.992188 39.933594 11 40.265625 10.71875 41.3125 C 10.371094 42.605469 9.683594 44.4375 8.25 46.46875 L 7.21875 47.90625 L 9 47.9375 C 15.175781 47.964844 18.753906 43.90625 19.3125 43.25 C 21.136719 43.65625 23.035156 43.9375 25 43.9375 C 37.582031 43.9375 47.9375 35.074219 47.9375 24 C 47.9375 12.925781 37.582031 4.0625 25 4.0625 Z M 25 5.9375 C 36.714844 5.9375 46.0625 14.089844 46.0625 24 C 46.0625 33.910156 36.714844 42.0625 25 42.0625 C 22.996094 42.0625 21.050781 41.820313 19.21875 41.375 L 18.65625 41.25 L 18.28125 41.71875 C 18.28125 41.71875 15.390625 44.976563 10.78125 45.75 C 11.613281 44.257813 12.246094 42.871094 12.53125 41.8125 C 12.929688 40.332031 12.9375 39.3125 12.9375 39.3125 L 12.9375 38.8125 L 12.5 38.53125 C 7.273438 35.21875 3.9375 29.941406 3.9375 24 C 3.9375 14.089844 13.28125 5.9375 25 5.9375 Z"></path>
+                          </svg>
+                      </span>
+                                <input class="w-full pr-6 pl-4 py-4 font-bold placeholder-gray-900 rounded-r-full focus:outline-none"
+                                       id="comment" name="comment" placeholder="Comment">
+                            </div>
+
+                            <input class="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200"
+                                   type="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="relative pb-20 2xl:pb-40">
+    <div class="container px-4 mx-auto">
+        <div class="maw-w mx-auto mb-20 overflow-x-auto overflow-y-hidden bg-white shadow-2xl rounded-lg">
+            <table class="table-auto w-full">
+                <thead class="bg-white">
+                <tr class="text-lg text-left"><th class="pl-14 py-8 text-blue-500 font-bold">Name</th><th class="pl-14 text-blue-500 font-bold">Comment</th></tr>
+                </thead>
+                <tbody class="bg-white">
+                <tr class="border-b border-blue-500" th:each="comment : ${comments}">
+                    <td class="w-1/3 py-10 pl-14 text-left border-r border-blue-500">
+                        <div class="items-center">
+                            <h4 class="text-xl font-bold" th:text="${comment.player}"></h4>
+                            <p class="font-normal" th:text="${comment.formattedDate}"></p>
+                        </div>
+                    </td>
+                    <td class="w-2/3 pl-14 px-4 text-lg font-bold" th:text="${comment.comment}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div th:replace="fragments::footer"/>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var menus = document.querySelector('.header-menu');
+
+        function minimizeMenu() {
+            menus.classList.remove('py-8');
+            menus.classList.add('py-5');
+            menus.classList.add('drop-shadow-2xl');
+        }
+        function showBackMenu() {
+            menus.classList.remove('py-5');
+            menus.classList.remove('drop-shadow-2xl');
+            menus.classList.add('py-8');
+
+        }
+        function handleScroll() {
+            var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            if (scrollPosition > 150) {
+                minimizeMenu();
+
+            } else {
+                showBackMenu();
+            }
+        }
+        window.addEventListener('scroll', handleScroll);
+    });
+</script>
+</body>
+</html>

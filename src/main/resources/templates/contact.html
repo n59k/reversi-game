@@ -64,7 +64,7 @@
 <div th:replace="fragments::footer"/>
 
 <script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.header-menu').addEventListener('scroll', function() {
         var menus = document.querySelector('.header-menu');
 
         function minimizeMenu() {
@@ -79,7 +79,7 @@
 
         }
         function handleScroll() {
-            var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            var scrollPosition = menus.scrollTop;
             if (scrollPosition > 150) {
                 minimizeMenu();
 
@@ -87,7 +87,7 @@
                 showBackMenu();
             }
         }
-        window.addEventListener('scroll', handleScroll);
+        menus.addEventListener('scroll', handleScroll);
     });
 </script>
 </body>

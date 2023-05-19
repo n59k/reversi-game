@@ -9,15 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import sk.tuke.gamestudio.entity.User;
+
+import java.io.IOException;
+
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class UserController {
     private User loggedUser;
     private String login;
+    private byte[] photo;
     @Autowired
     private UserRepository userRepository;
+
+
+
 
     @GetMapping("/home")
     public String main() {
@@ -119,6 +127,44 @@ public class UserController {
         loggedUser = null;
         return "redirect:/";
     }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        if (loggedUser != null) {
+            model.addAttribute("user", loggedUser);
+            return "profile";
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+
+    @RequestMapping(value = "/uploadPhoto", method = RequestMethod.POST)
+    public String uploadPhoto(@RequestParam("photo") MultipartFile photoFile) {
+        // Process the uploaded photo file
+        if (!photoFile.isEmpty()) {
+            try {
+                byte[] photoData = photoFile.getBytes();
+                // Save the photo data to the user entity or perform any required processing
+                setPhoto(photoData);
+            } catch (IOException e) {
+                // Handle the exception
+                e.printStackTrace();
+            }
+        }
+        // Redirect or return a response
+        return "redirect:/profile";
+    }
+
 
     public User getLoggedUser() {
         return loggedUser;

@@ -48,6 +48,7 @@
             </div>
         </div>
     </div>
+    <button id="randomMoveButton" type="button" class="inline-block mt-10 px-12 py-5 bg-blue-500 hover:bg-blue-600 rounded-full text-lg font-bold text-white transition duration-200">Random move!</button>
 
     <div class="flex flex-wrap container px-4 mx-auto mb-20">
         <div class="relative w-full lg:w-3/5 pr-4 mb-8 lg:mb-0 lg:py-12">
@@ -64,6 +65,8 @@
             <div class="inline-flex items-center">
                 <div class="text-left">
                     <button id="new-game" type="button" class="inline-block mt-10 px-12 py-5 bg-blue-500 hover:bg-blue-600 rounded-full text-lg font-bold text-white transition duration-200">New Game!</button>
+
+
                     <div class="flex">
                         <p class="text-xl lg:text-3xl font-bold my-5 mr-5">Player: <span id="playerScore">0</span></p>
                         <p class="text-xl lg:text-3xl font-bold my-5">Bot: <span id="botScore">0</span></p>
@@ -91,6 +94,35 @@
         $(document).on('click', '#new-game', function() {
             location.reload();
         });
+
+        $(document).on('click', '#randomMoveButton', function() {
+            $.ajax({
+                type: "POST",
+                url: "/reversi/random-move",
+                success: function (data) {
+                    var responseData = JSON.parse(data);
+                    var board = document.getElementById("board");
+                    board.innerHTML = responseData.boardHtml;
+                    document.getElementById("playerScore").innerText = responseData.playerScore;
+                    document.getElementById("botScore").innerText = responseData.botScore;
+
+                    if (responseData.gameOver) {
+                        var winnerText;
+                        if (responseData.playerScore > responseData.botScore) {
+                            winnerText = "You win!";
+                        } else if (responseData.playerScore < responseData.botScore) {
+                            winnerText = "Unfortunately, you lost!";
+                        } else {
+                            winnerText = "Tie!";
+                        }
+                        alert(winnerText);
+                    }
+                },
+                dataType: "html"
+            });
+            return false;
+        });
+
 
         function makeMove(row, col) {
             $.ajax({
@@ -123,6 +155,10 @@
 
 
     });
+
+
+</script>
+
 
 
 </script>
